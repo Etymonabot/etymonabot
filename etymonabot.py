@@ -71,16 +71,17 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 
 # Cards data
 cards_data = [
+    {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"], "examples_ru": ["университет", "унификация"]},
     {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"]},
-    {"number": 2, "latin": "duo", "greek": "dyo (δύο)", "examples": ["duet", "dual", "duplicate"]},
-    {"number": 3, "latin": "tres", "greek": "treis (τρεῖς)", "examples": ["triangle", "trio", "triple"]},
-    {"number": 4, "latin": "quattuor", "greek": "tessares (τέσσαρες)", "examples": ["quartet", "quadrant", "tetrahedron"]},
-    {"number": 5, "latin": "quinque", "greek": "pente (πέντε)", "examples": ["pentagon", "pentathlon", "quintet"]},
-    {"number": 6, "latin": "sex", "greek": "hex (ἕξ)", "examples": ["hexagon", "sextet", "sextuple"]},
-    {"number": 7, "latin": "septem", "greek": "hepta (ἑπτά)", "examples": ["September", "heptagon", "heptathlon"]},
-    {"number": 8, "latin": "octo", "greek": "okto (ὀκτώ)", "examples": ["octopus", "octagon", "October"]},
-    {"number": 9, "latin": "novem", "greek": "ennea (ἐννέα)", "examples": ["nonagon", "enneagram", "November"]},
-    {"number": 10, "latin": "decem", "greek": "deka (δέκα)", "examples": ["decimal", "decade", "decagon"]},
+    {"number": 2, "latin": "duo", "greek": "dyo (δύο)", "examples": ["duet", "dual", "duplicate"], "examples_ru": ["дуэт", "дуплекс"]},
+    {"number": 3, "latin": "tres", "greek": "treis (τρεῖς)", "examples": ["triangle", "trio", "triple"], "examples_ru": ["треугольник", "трио"]},
+    {"number": 4, "latin": "quattuor", "greek": "tessares (τέσσαρες)", "examples": ["quartet", "quadrant", "tetrahedron"], "examples_ru": ["четверть", "тетраэдр"]},
+    {"number": 5, "latin": "quinque", "greek": "pente (πέντε)", "examples": ["pentagon", "pentathlon", "quintet"], "examples_ru": ["пентагон", "пентатлон"]},
+    {"number": 6, "latin": "sex", "greek": "hex (ἕξ)", "examples": ["hexagon", "sextet", "sextuple"], "examples_ru": ["гексаэдр", "гексагон"]},
+    {"number": 7, "latin": "septem", "greek": "hepta (ἑπτά)", "examples": ["September", "heptagon", "heptathlon"], "examples_ru": ["сентябрь", "гептагон"]},
+    {"number": 8, "latin": "octo", "greek": "okto (ὀκτώ)", "examples": ["octopus", "octagon", "October"], "examples_ru": ["октябрь", "октаэдр"]},
+    {"number": 9, "latin": "novem", "greek": "ennea (ἐννέα)", "examples": ["nonagon", "enneagram", "November"], "examples_ru": ["ноябрь"]},
+    {"number": 10, "latin": "decem", "greek": "deka (δέκα)", "examples": ["decimal", "decade", "decagon"], "examples_ru": ["десяток", "декада"]},
     {"number": 11, "latin": "undecim", "greek": "hendeka (ἕνδεκα)", "examples": []},
     {"number": 12, "latin": "duodecim", "greek": "dodeka (δώδεκα)", "examples": ["dodecahedron"]},
     {"number": 13, "latin": "tredecim", "greek": "triskaideka (τρισκαίδεκα)", "examples": []},
@@ -98,7 +99,7 @@ cards_data = [
     {"number": 70, "latin": "septuaginta", "greek": "hebdomēkonta (ἑβδομήκοντα)", "examples": []},
     {"number": 80, "latin": "octoginta", "greek": "ogdoekonta (ὀγδοήκοντα)", "examples": []},
     {"number": 90, "latin": "nonaginta", "greek": "enenēkonta (ἐνενήκοντα)", "examples": []},
-    {"number": 100, "latin": "centum", "greek": "hekaton (ἑκατόν)", "examples": ["percent", "hecatomb"]},
+    {"number": 100, "latin": "centum", "greek": "hekaton (ἑκατόν)", "examples": ["percent", "hecatomb"], "examples_ru": ["процент", "центурия"]},
     {"number": 200, "latin": "ducenti", "greek": "diakosia (διακόσια)", "examples": []},
     {"number": 300, "latin": "trecenti", "greek": "triakosia (τριακόσια)", "examples": []},
     {"number": 400, "latin": "quadringenti", "greek": "tetrakosia (τετρακόσια)", "examples": []},
@@ -107,7 +108,7 @@ cards_data = [
     {"number": 700, "latin": "septingenti", "greek": "heptakosia (ἑπτακόσια)", "examples": []},
     {"number": 800, "latin": "octingenti", "greek": "oktakosia (ὀκτακόσια)", "examples": []},
     {"number": 900, "latin": "nongenti", "greek": "enneakosia (ἐννεακόσια)", "examples": []},
-    {"number": 1000, "latin": "mille", "greek": "chilia (χίλια)", "examples": ["millennium", "millimeter"]}
+    {"number": 1000, "latin": "mille", "greek": "chilia (χίλια)", "examples": ["millennium", "millimeter"], "examples_ru": ["миллиметр", "миллион"]}
 ]
 
 # Для отслеживания прогресса по карточкам
