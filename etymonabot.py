@@ -40,8 +40,7 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {
-                    "role": "system",
+                { "role": "system",
                     "content": """
 Ты — эксперт по морфемике и этимологии русского языка.
 Разбирай слово строго по современным правилам морфемного анализа:
