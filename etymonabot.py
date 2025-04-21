@@ -2,6 +2,7 @@ import os
 import openai
 import logging
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -17,12 +18,21 @@ bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 openai.api_key = OPENAI_API_KEY
 
-# Start command
+# Устанавливаем команды для меню
+async def set_bot_commands(dp):
+    await dp.bot.set_my_commands([
+        BotCommand("start", "Приветствие и инструкция"),
+        BotCommand("explain", "Объяснить слово"),
+        BotCommand("cards", "Карточки: латинские и греческие числительные"),
+        BotCommand("quiz", "Небольшая викторина по словам")
+    ])
+
+# Приветствие
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
     await message.reply("Привет! Я Etymonabot — бот для подготовки к олимпиаде по лингвистике.\n\nОтправь мне слово, и я объясню его морфемный состав и этимологию.\n\nПопробуй: /explain декабрь")
 
-# Explain command
+# Команда /explain
 @dp.message_handler(commands=['explain'])
 async def explain_word(message: types.Message):
     query = message.get_args()
@@ -46,10 +56,15 @@ async def explain_word(message: types.Message):
         logging.error(e)
         await message.reply("Произошла ошибка при обработке запроса. Попробуй позже.")
 
-# Fallback handler for any text
+# Обработка всех остальных сообщений
 @dp.message_handler()
 async def handle_text(message: types.Message):
     await message.reply("Чтобы узнать этимологию слова, используй команду /explain <слово>")
 
+# Запуск бота и установка команд
+async def on_startup(dp):
+    await set_bot_commands(dp)
+
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+
