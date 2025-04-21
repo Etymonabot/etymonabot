@@ -72,6 +72,7 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 
 # Cards data
 cards_data = [
+    {"number": 0, "latin": "nulla / nihil", "greek": "ouden (οὐδέν)", "examples": ["nullify", "nihilism"], "examples_ru": ["аннигилировать", "нихилизм"], "note": "Латинское 'nulla' — женская форма 'нулевой', 'nihil' — ничто. Греческое 'ouden' — тоже 'ничто'."},
     {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"], "examples_ru": ["университет", "унификация"]},
     {"number": 2, "latin": "duo", "greek": "dyo (δύο)", "examples": ["duet", "dual", "duplicate"], "examples_ru": ["дуэт", "дуплекс"]},
     {"number": 3, "latin": "tres", "greek": "treis (τρεῖς)", "examples": ["triangle", "trio", "triple"], "examples_ru": ["треугольник", "трио"]},
@@ -113,12 +114,53 @@ cards_data = [
 
 # Для отслеживания прогресса по карточкам
 user_card_index = {}
+user_quiz_index = {}
+user_quiz_score = {}
 
-@dp.message_handler(commands=['cards'])
+@dp.message_handler(commands=['quiz'])
+async def send_quiz_intro(message: types.Message):
+    user_id = message.from_user.id
+    user_quiz_index[user_id] = 0
+    user_quiz_score[user_id] = 0
+    await message.reply("🧠 Викторина: назови число по латинскому и греческому написанию. Отправь цифру в ответ.")
+    await send_quiz_card(message.chat.id, user_id)
 async def send_first_card(message: types.Message):
-    user_card_index[message.from_user.id] = 0
-    card = cards_data[0]
-    await message.reply(format_card(card))
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton("0–10", callback_data="cards_0_10"),
+        types.InlineKeyboardButton("10–20", callback_data="cards_10_20"),
+    )
+    keyboard.add(
+        types.InlineKeyboardButton("20–100", callback_data="cards_20_100"),
+        types.InlineKeyboardButton("100–1000", callback_data="cards_100_1000"),
+    )
+    await message.reply("Выбери диапазон карточек:", reply_markup=keyboard)
+
+@dp.callback_query_handler(lambda c: c.data and (c.data.startswith("cards_") or c.data == "back_to_menu"))
+async def process_card_range(callback_query: types.CallbackQuery):
+    user_id = callback_query.from_user.id
+    data = callback_query.data
+    if data == "cards_0_10":
+        user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 1)
+    elif data == "cards_10_20":
+        user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 10)
+    elif data == "cards_20_100":
+        user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 20)
+    elif data == "cards_100_1000":
+        user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 100)
+    elif data == "back_to_menu":
+        await send_first_card(callback_query.message)
+        await callback_query.answer()
+        return
+    else:
+        await callback_query.answer("Неверный диапазон")
+        return
+
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(types.InlineKeyboardButton("🔙 Назад к выбору диапазона", callback_data="back_to_menu"))
+    await callback_query.message.answer(format_card(cards_data[user_card_index[user_id]]), reply_markup=keyboard)
+    await callback_query.answer()
+    
 
 @dp.message_handler(commands=['next'])
 async def send_next_card(message: types.Message):
@@ -131,18 +173,64 @@ async def send_next_card(message: types.Message):
         await message.reply("🎉 Это была последняя карточка!")
 
 
+async def send_quiz_card(chat_id, user_id):
+    if user_quiz_index[user_id] >= len(cards_data):
+        score = user_quiz_score[user_id]
+        await bot.send_message(chat_id, f"🏁 Викторина окончена! Ты набрал {score} из {len(cards_data)}.")
+        return
+    card = cards_data[user_quiz_index[user_id]]
+    text = f"🇱🇦 Латинское: {card['latin']}
+🇬🇷 Греческое: {card['greek']}
+
+Сколько это? Введи цифру."
+    await bot.send_message(chat_id, text)
+
+@dp.message_handler(lambda message: message.text.isdigit())
+async def check_quiz_answer(message: types.Message):
+    user_id = message.from_user.id
+    if user_id not in user_quiz_index:
+        return  # не в режиме викторины
+
+    current_card = cards_data[user_quiz_index[user_id]]
+    correct = str(current_card['number']) == message.text.strip()
+    if correct:
+        user_quiz_score[user_id] += 1
+        await message.reply("✅ Верно!")
+    else:
+        await message.reply(f"❌ Неверно. Правильный ответ: {current_card['number']}")
+
+    user_quiz_index[user_id] += 1
+    await send_quiz_card(message.chat.id, user_id)
+
+
 def format_card(card):
-         text += f"• {ex}\n"
-    text += "\n➡️ Напиши /next, чтобы продолжить"
-    return text
-    text = f"🔢 {card['number']}\n"
-    text += f"🇱🇦 Латинский: {card['latin']}\n"
-    text += f"🇬🇷 Греческий: {card['greek']}\n"
-    if card['examples']:
-        text += "\n📘 Примеры:\n"
+    text = f"🔢 {card['number']}
+"
+    text += f"🇱🇦 Латинский: {card['latin']}
+"
+    text += f"🇬🇷 Греческий: {card['greek']}
+"
+    if card.get('note'):
+        text += f"
+📙 Образование:
+{card['note']}
+"
+    if card.get('examples'):
+        text += "
+📘 Примеры на других языках:
+"
         for ex in card['examples']:
-            text += f"• {ex}\n"
-    text += "\n➡️ Напиши /next, чтобы продолжить"
+            text += f"• {ex}
+"
+    if card.get('examples_ru'):
+        text += "
+📗 Примеры на русском:
+"
+        for ex in card['examples_ru']:
+            text += f"• {ex}
+"
+    text += "
+➡️ Напиши /next, чтобы продолжить"
     return text
 
 # Запуск
@@ -156,4 +244,3 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-
