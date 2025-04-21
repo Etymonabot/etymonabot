@@ -50,7 +50,7 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 — тип заимствования, если применимо (книжное, разговорное и т.д.);
 — как минимум один академический источник (Фасмер, Клейн, TLFi, Duden и др.).
 
-Пиши как лингвист-филолог, не упрощай."
+Пиши как лингвист-филолог, не упрощай.""
                 },
                 {
                     "role": "user",
@@ -110,7 +110,7 @@ async def process_card_range(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
     data = callback_query.data
     if data == "cards_0_10":
-    user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 0)
+        user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 0)
     elif data == "cards_10_20":
         user_card_index[user_id] = next(i for i, c in enumerate(cards_data) if c['number'] == 10)
     elif data == "cards_20_100":
@@ -198,5 +198,3 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-
-
