@@ -42,19 +42,15 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
             messages=[
                 {
                     "role": "system",
-                    "content": """
-Ты — эксперт по морфемике и этимологии русского языка.
-Разбирай слово строго по современным правилам морфемного анализа:
+                    "content": "Ты — лингвист и преподаватель этимологии и морфологии в профильном гуманитарном вузе. Отвечай глубоко, профессионально, как для студентов-филологов. Для каждого слова делай полный разбор:
 
-— Учитывай только те морфемы, которые реально выделяются в современном русском языке (на базе школьной и вузовской грамматики).
-— Если слово не делится на морфемы, прямо указывай: \"слово имеет цельную неразложимую основу\".
-— Не выделяй суффиксы или приставки, которые не встречаются в других словах.
-— Не придумывай морфемное членение по звуку, если оно не подтверждается современными грамматиками (например, в слове \"морковь\" корень — \"морковь\", а не \"морк-\").
+— морфемный состав (обозначь корень, суффиксы, приставки — если есть);
+— этимологию: происхождение, путь заимствования (с указанием языков и форм);
+— семантическое развитие и сдвиги значений;
+— тип заимствования, если применимо (книжное, разговорное и т.д.);
+— как минимум один академический источник (Фасмер, Клейн, TLFi, Duden и др.).
 
-После морфемного разбора кратко опиши этимологию: происхождение слова, путь заимствования (если есть), и сдвиги значений.
-
-Пиши точно, лаконично и без избыточной лирики.
-"""
+Пиши как лингвист-филолог, не упрощай."
                 },
                 {
                     "role": "user",
@@ -70,7 +66,19 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 
     await state.finish()
 
-# Здесь находится cards_data и его содержимое (оставим без изменений — слишком длинный для вставки)
+cards_data = [
+    {"number": 0, "latin": "nulla", "greek": "ouden", "examples": [], "examples_ru": [], "note": "Латинское 'nulla' — ничто"},
+    {"number": 1, "latin": "unus", "greek": "heis", "examples": ["universe"], "examples_ru": ["унификация"]},
+    {"number": 2, "latin": "duo", "greek": "dyo", "examples": ["dual"], "examples_ru": ["дуэт"]},
+    {"number": 3, "latin": "tres", "greek": "treis", "examples": ["triangle"], "examples_ru": ["трио"]},
+    {"number": 4, "latin": "quattuor", "greek": "tettares", "examples": ["quadrant"], "examples_ru": ["квадрант"]},
+    {"number": 5, "latin": "quinque", "greek": "pente", "examples": ["pentagon"], "examples_ru": ["пентатлон"]},
+    {"number": 6, "latin": "sex", "greek": "hex", "examples": ["sextet"], "examples_ru": ["гексада"]},
+    {"number": 7, "latin": "septem", "greek": "hepta", "examples": ["September"], "examples_ru": ["гептодром"]},
+    {"number": 8, "latin": "octo", "greek": "okto", "examples": ["octopus"], "examples_ru": ["октава"]},
+    {"number": 9, "latin": "novem", "greek": "ennea", "examples": ["November"], "examples_ru": ["эннеагон"]},
+    {"number": 10, "latin": "decem", "greek": "deka", "examples": ["decimal"], "examples_ru": ["декада"]}
+]
 
 # Для отслеживания прогресса по карточкам
 user_card_index = {}
@@ -190,5 +198,4 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+
