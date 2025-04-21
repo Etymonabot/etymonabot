@@ -22,6 +22,10 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 openai.api_key = OPENAI_API_KEY
 
+@dp.message_handler(commands=['cards'])
+async def start_cards(message: types.Message):
+    await send_first_card(message)
+
 # FSM-состояние
 class ExplainWord(StatesGroup):
     waiting_for_word = State()
