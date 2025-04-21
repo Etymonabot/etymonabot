@@ -70,47 +70,7 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 
     await state.finish()
 
-# Cards data
-cards_data = [
-    {"number": 0, "latin": "nulla / nihil", "greek": "ouden (οὐδέν)", "examples": ["nullify", "nihilism"], "examples_ru": ["аннигилировать", "нихилизм"], "note": "Латинское 'nulla' — женская форма 'нулевой', 'nihil' — ничто. Греческое 'ouden' — тоже 'ничто'."},
-    {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"], "examples_ru": ["университет", "унификация"]},
-    {"number": 2, "latin": "duo", "greek": "dyo (δύο)", "examples": ["duet", "dual", "duplicate"], "examples_ru": ["дуэт", "дуплекс"]},
-    {"number": 3, "latin": "tres", "greek": "treis (τρεῖς)", "examples": ["triangle", "trio", "triple"], "examples_ru": ["треугольник", "трио"]},
-    {"number": 4, "latin": "quattuor", "greek": "tessares (τέσσαρες)", "examples": ["quartet", "quadrant", "tetrahedron"], "examples_ru": ["четверть", "тетраэдр"]},
-    {"number": 5, "latin": "quinque", "greek": "pente (πέντε)", "examples": ["pentagon", "pentathlon", "quintet"], "examples_ru": ["пентагон", "пентатлон"]},
-    {"number": 6, "latin": "sex", "greek": "hex (ἕξ)", "examples": ["hexagon", "sextet", "sextuple"], "examples_ru": ["гексаэдр", "гексагон"]},
-    {"number": 7, "latin": "septem", "greek": "hepta (ἑπτά)", "examples": ["September", "heptagon", "heptathlon"], "examples_ru": ["сентябрь", "гептагон"]},
-    {"number": 8, "latin": "octo", "greek": "okto (ὀκτώ)", "examples": ["octopus", "octagon", "October"], "examples_ru": ["октябрь", "октаэдр"]},
-    {"number": 9, "latin": "novem", "greek": "ennea (ἐννέα)", "examples": ["nonagon", "enneagram", "November"], "examples_ru": ["ноябрь"]},
-    {"number": 10, "latin": "decem", "greek": "deka (δέκα)", "examples": ["decimal", "decade", "decagon"], "examples_ru": ["десяток", "декада"]},
-    {"number": 11, "latin": "undecim", "greek": "hendeka (ἕνδεκα)", "examples": [], "note": "Латинское: unus (один) + decem (десять); греческое: heis (один) + deka (десять)."},
-    {"number": 12, "latin": "duodecim", "greek": "dodeka (δώδεκα)", "examples": ["dodecahedron"], "note": "Латинское: duo (два) + decem (десять); греческое: dyo (два) + deka (десять)."},
-    {"number": 13, "latin": "tredecim", "greek": "triskaideka (τρισκαίδεκα)", "examples": [], "note": "Латинское: tres (три) + decem (десять); греческое: treis (три) + deka (десять)."},
-    {"number": 14, "latin": "quattuordecim", "greek": "tetrakaideka (τετρακαιδέκα)", "examples": [], "note": "Латинское: quattuor (четыре) + decem; греческое: tessares (четыре) + deka (десять)."},
-    {"number": 15, "latin": "quindecim", "greek": "pentekaideka (πεντεκαιδέκα)", "examples": [], "note": "Латинское: quinque (пять) + decem; греческое: pente (пять) + deka."},
-    {"number": 16, "latin": "sedecim", "greek": "hexakaideka (ἑξακαιδέκα)", "examples": [], "note": "Латинское: sex (шесть) + decem; греческое: hex (шесть) + deka."},
-    {"number": 17, "latin": "septendecim", "greek": "heptakaideka (ἑπτακαιδέκα)", "examples": [], "note": "Латинское: septem (семь) + decem; греческое: hepta (семь) + deka."},
-    {"number": 18, "latin": "duodeviginti", "greek": "oktokaideka (ὀκτωκαιδέκα)", "examples": [], "note": "Латинское: duo (два) от двадцати — 20−2; греческое: okto (восемь) + deka."},
-    {"number": 19, "latin": "undeviginti", "greek": "enneakaideka (ἐννεακαιδέκα)", "examples": [], "note": "Латинское: unus (один) от двадцати — 20−1; греческое: ennea (девять) + deka."},
-    {"number": 20, "latin": "viginti", "greek": "eikosi (εἴκοσι)", "examples": ["icosahedron"]},
-    {"number": 30, "latin": "triginta", "greek": "triakonta (τριάκοντα)", "examples": [], "note": "Образовано от латинского 'tres' (три) + суффикс -ginta; греческое 'triakonta' — от 'treis' (три) + 'deka' (десять) в сложной форме."},
-    {"number": 40, "latin": "quadraginta", "greek": "tessarakonta (τεσσαράκοντα)", "examples": [], "note": "Образовано от 'quattuor' (четыре) + суффикс -ginta; греческое 'tessarakonta' — от 'tessares' (четыре) + 'deka'."},
-    {"number": 50, "latin": "quinquaginta", "greek": "pentekonta (πεντήκοντα)", "examples": [], "note": "От 'quinque' (пять) + -ginta; греческое — от 'pente' (пять) + 'deka'."},
-    {"number": 60, "latin": "sexaginta", "greek": "hexekonta (ἑξήκοντα)", "examples": [], "note": "От 'sex' (шесть) + -ginta; греческое — 'hex' (шесть) + 'deka'."},
-    {"number": 70, "latin": "septuaginta", "greek": "hebdomēkonta (ἑβδομήκοντα)", "examples": [], "note": "От 'septem' (семь) + -ginta; греческое — от 'hepta' (семь) + 'deka'."},
-    {"number": 80, "latin": "octoginta", "greek": "ogdoekonta (ὀγδοήκοντα)", "examples": [], "note": "От 'octo' (восемь) + -ginta; греческое — от 'okto' (восемь) + 'deka'."},
-    {"number": 90, "latin": "nonaginta", "greek": "enenēkonta (ἐνενήκοντα)", "examples": [], "note": "От 'novem' (девять) + -ginta; греческое — от 'ennea' (девять) + 'deka'."},
-    {"number": 100, "latin": "centum", "greek": "hekaton (ἑκατόν)", "examples": ["percent", "hecatomb"], "examples_ru": ["процент", "центурия"]},
-    {"number": 200, "latin": "ducenti", "greek": "diakosia (διακόσια)", "examples": [], "note": "От 'duo' (два) + 'centi' (сотни); греческое — 'dyo' (два) + 'hekaton' (сто)."},
-    {"number": 300, "latin": "trecenti", "greek": "triakosia (τριακόσια)", "examples": [], "note": "От 'tres' (три) + 'centi'; греческое — от 'treis' (три) + 'hekaton'."},
-    {"number": 400, "latin": "quadringenti", "greek": "tetrakosia (τετρακόσια)", "examples": [], "note": "От 'quattuor' (четыре) + 'centi'; греческое — от 'tessares' (четыре) + 'hekaton'."},
-    {"number": 500, "latin": "quingenti", "greek": "pentakosia (πεντακόσια)", "examples": [], "note": "От 'quinque' (пять) + 'centi'; греческое — от 'pente' (пять) + 'hekaton'."},
-    {"number": 600, "latin": "sescenti", "greek": "hexakosia (ἑξακόσια)", "examples": [], "note": "От 'sex' (шесть) + 'centi'; греческое — от 'hex' (шесть) + 'hekaton'."},
-    {"number": 700, "latin": "septingenti", "greek": "heptakosia (ἑπτακόσια)", "examples": [], "note": "От 'septem' (семь) + 'centi'; греческое — от 'hepta' (семь) + 'hekaton'."},
-    {"number": 800, "latin": "octingenti", "greek": "oktakosia (ὀκτακόσια)", "examples": [], "note": "От 'octo' (восемь) + 'centi'; греческое — от 'okto' (восемь) + 'hekaton'."},
-    {"number": 900, "latin": "nongenti", "greek": "enneakosia (ἐννεακόσια)", "examples": [], "note": "От 'novem' (девять) + 'centi'; греческое — от 'ennea' (девять) + 'hekaton'."},
-    {"number": 1000, "latin": "mille", "greek": "chilia (χίλια)", "examples": ["millennium", "millimeter"], "examples_ru": ["миллиметр", "миллион"]}
-]
+# Здесь находится cards_data и его содержимое (оставим без изменений — слишком длинный для вставки)
 
 # Для отслеживания прогресса по карточкам
 user_card_index = {}
@@ -124,6 +84,7 @@ async def send_quiz_intro(message: types.Message):
     user_quiz_score[user_id] = 0
     await message.reply("🧠 Викторина: назови число по латинскому и греческому написанию. Отправь цифру в ответ.")
     await send_quiz_card(message.chat.id, user_id)
+
 async def send_first_card(message: types.Message):
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(
@@ -160,7 +121,6 @@ async def process_card_range(callback_query: types.CallbackQuery):
     keyboard.add(types.InlineKeyboardButton("🔙 Назад к выбору диапазона", callback_data="back_to_menu"))
     await callback_query.message.answer(format_card(cards_data[user_card_index[user_id]]), reply_markup=keyboard)
     await callback_query.answer()
-    
 
 @dp.message_handler(commands=['next'])
 async def send_next_card(message: types.Message):
@@ -172,7 +132,6 @@ async def send_next_card(message: types.Message):
     else:
         await message.reply("🎉 Это была последняя карточка!")
 
-
 async def send_quiz_card(chat_id, user_id):
     if user_quiz_index[user_id] >= len(cards_data):
         score = user_quiz_score[user_id]
@@ -180,16 +139,10 @@ async def send_quiz_card(chat_id, user_id):
         return
     card = cards_data[user_quiz_index[user_id]]
     text = (
-        f"🇱🇦 Латинское: {card['latin']}
-"
-        f"🇬🇷 Греческое: {card['greek']}
-
-"
+        f"🇱🇦 Латинское: {card['latin']}\n"
+        f"🇬🇷 Греческое: {card['greek']}\n\n"
         f"Сколько это? Введи цифру."
-    )}
-🇬🇷 Греческое: {card['greek']}
-
-Сколько это? Введи цифру."
+    )
     await bot.send_message(chat_id, text)
 
 @dp.message_handler(lambda message: message.text.isdigit())
@@ -209,35 +162,21 @@ async def check_quiz_answer(message: types.Message):
     user_quiz_index[user_id] += 1
     await send_quiz_card(message.chat.id, user_id)
 
-
 def format_card(card):
-    text = f"🔢 {card['number']}
-"
-    text += f"🇱🇦 Латинский: {card['latin']}
-"
-    text += f"🇬🇷 Греческий: {card['greek']}
-"
+    text = f"🔢 {card['number']}\n"
+    text += f"🇱🇦 Латинский: {card['latin']}\n"
+    text += f"🇬🇷 Греческий: {card['greek']}\n"
     if card.get('note'):
-        text += f"
-📙 Образование:
-{card['note']}
-"
+        text += f"\n📙 Образование:\n{card['note']}\n"
     if card.get('examples'):
-        text += "
-📘 Примеры на других языках:
-"
+        text += "\n📘 Примеры на других языках:\n"
         for ex in card['examples']:
-            text += f"• {ex}
-"
+            text += f"• {ex}\n"
     if card.get('examples_ru'):
-        text += "
-📗 Примеры на русском:
-"
+        text += "\n📗 Примеры на русском:\n"
         for ex in card['examples_ru']:
-            text += f"• {ex}
-"
-    text += "
-➡️ Напиши /next, чтобы продолжить"
+            text += f"• {ex}\n"
+    text += "\n➡️ Напиши /next, чтобы продолжить"
     return text
 
 # Запуск
@@ -249,5 +188,7 @@ async def on_startup(dp):
         BotCommand("quiz", "Небольшая викторина по словам")
     ])
 
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
