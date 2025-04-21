@@ -40,7 +40,8 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                { "role": "system",
+                {
+                    "role": "system",
                     "content": """
 Ты — эксперт по морфемике и этимологии русского языка.
 Разбирай слово строго по современным правилам морфемного анализа:
@@ -71,8 +72,7 @@ async def explain_word_fsm(message: types.Message, state: FSMContext):
 
 # Cards data
 cards_data = [
-      {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"], "examples_ru": ["университет", "унификация"]},
-    {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"]},
+    {"number": 1, "latin": "unus", "greek": "heis (εἷς)", "examples": ["unison", "uniform", "universe"], "examples_ru": ["университет", "унификация"]},
     {"number": 2, "latin": "duo", "greek": "dyo (δύο)", "examples": ["duet", "dual", "duplicate"], "examples_ru": ["дуэт", "дуплекс"]},
     {"number": 3, "latin": "tres", "greek": "treis (τρεῖς)", "examples": ["triangle", "trio", "triple"], "examples_ru": ["треугольник", "трио"]},
     {"number": 4, "latin": "quattuor", "greek": "tessares (τέσσαρες)", "examples": ["quartet", "quadrant", "tetrahedron"], "examples_ru": ["четверть", "тетраэдр"]},
@@ -107,7 +107,7 @@ cards_data = [
     {"number": 600, "latin": "sescenti", "greek": "hexakosia (ἑξακόσια)", "examples": [], "note": "От 'sex' (шесть) + 'centi'; греческое — от 'hex' (шесть) + 'hekaton'."},
     {"number": 700, "latin": "septingenti", "greek": "heptakosia (ἑπτακόσια)", "examples": [], "note": "От 'septem' (семь) + 'centi'; греческое — от 'hepta' (семь) + 'hekaton'."},
     {"number": 800, "latin": "octingenti", "greek": "oktakosia (ὀκτακόσια)", "examples": [], "note": "От 'octo' (восемь) + 'centi'; греческое — от 'okto' (восемь) + 'hekaton'."},
-    {"number": 900, "latin": "nongenti", "greek": "enneakosia (ἐννεακόσια)", "examples": [], "note": "От 'novem' (девять) + 'centi'; греческое — от 'ennea' (девять) + 'hekaton'."}
+    {"number": 900, "latin": "nongenti", "greek": "enneakosia (ἐννεακόσια)", "examples": [], "note": "От 'novem' (девять) + 'centi'; греческое — от 'ennea' (девять) + 'hekaton'."},
     {"number": 1000, "latin": "mille", "greek": "chilia (χίλια)", "examples": ["millennium", "millimeter"], "examples_ru": ["миллиметр", "миллион"]}
 ]
 
@@ -132,6 +132,9 @@ async def send_next_card(message: types.Message):
 
 
 def format_card(card):
+         text += f"• {ex}\n"
+    text += "\n➡️ Напиши /next, чтобы продолжить"
+    return text
     text = f"🔢 {card['number']}\n"
     text += f"🇱🇦 Латинский: {card['latin']}\n"
     text += f"🇬🇷 Греческий: {card['greek']}\n"
@@ -153,3 +156,4 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+
