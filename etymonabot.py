@@ -179,7 +179,14 @@ async def send_quiz_card(chat_id, user_id):
         await bot.send_message(chat_id, f"🏁 Викторина окончена! Ты набрал {score} из {len(cards_data)}.")
         return
     card = cards_data[user_quiz_index[user_id]]
-    text = f"🇱🇦 Латинское: {card['latin']}
+    text = (
+        f"🇱🇦 Латинское: {card['latin']}
+"
+        f"🇬🇷 Греческое: {card['greek']}
+
+"
+        f"Сколько это? Введи цифру."
+    )}
 🇬🇷 Греческое: {card['greek']}
 
 Сколько это? Введи цифру."
@@ -244,4 +251,5 @@ async def on_startup(dp):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+
 
