@@ -34,7 +34,7 @@ async def explain_word(message: types.Message):
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Ты — эксперт по морфологии и этимологии русского языка."},
                 {"role": "user", "content": f"Объясни морфемный состав и этимологию слова '{query}' для старшеклассника, готовящегося к олимпиаде по лингвистике. Объясни просто, но точно."}
